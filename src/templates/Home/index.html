@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% set active_page = 'home' %}
+
+{% block title %}
+    Home | SDBC
+{% endblock %}
+
+{% block body %}
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="post-preview">
+                    <p> Database cleaning tool made by students of the University of Antwerp for their class
+                        "Programming project databases"</p>
+                </div>
+                <hr>
+                <h1> Tutorial </h1>
+                <div class="post-preview">
+                    <h3 class="post-title">Uploading a database</h3>
+                    <p>
+                        Go to the page
+                        <a href="{{ url_for('database_base') }}">Databases</a> -> Upload a database.
+                        Here you can upload a .csv file or zip file or SQL dump. In case of a zip file with multiple tables you will be redirected
+                        a join table page where you are able to join the tables.
+                    </p>
+                </div>
+                <hr>
+                <div class="post-preview">
+                    <h3 class="post-title">Viewing your table</h3>
+                    <p>
+                        Go to the page
+                        <a href="{{ url_for('database_ext') }}">Tables</a> If you press on the name of your database you should be redirected to the page of your table.
+
+                    </p>
+                </div>
+                <hr>
+                <div class="post-preview">
+                    <h3 class="post-title">Settings</h3>
+                    <p>
+                        Go to the page
+                        <a href="{{ url_for('settings_base') }}">Settings</a> Here you should be able too find
+                        the personal information of your account if you are logged in and here you are able to edit your information.
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+{% endblock %}
+
+</html>

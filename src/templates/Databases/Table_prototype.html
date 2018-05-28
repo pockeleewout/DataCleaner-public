@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SDBC 5000 Table</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='vendor/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S" crossorigin="anonymous">
+    <script src="{{ url_for('static', filename='js/dropdown.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/logo-nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.sparkline.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
+
+
+<!--    <script type="text/javascript">
+        $(function () {
+            /** This code runs when everything has been loaded on the page */
+            /* Inline sparklines take their values from the contents of the tag */
+            $('.inlinesparkline').sparkline();
+
+            /* Sparklines can also take their values from the first argument
+            passed to the sparkline() function */
+            var myvalues = [10, 8, 5, 7, 4, 4, 1];
+            $('.dynamicsparkline').sparkline(myvalues);
+
+            /* The second argument gives options such as chart type */
+            $('.dynamicbar').sparkline(myvalues, {type: 'bar', barColor: 'green'});
+
+            /* Use 'html' instead of an array of values to pass options
+            to a sparkline with data in the tag */
+            $('.inlinebar').sparkline('html', {type: 'bar', barColor: 'blue', height: 'auto'});
+
+        });
+    </script>-->
+</head>
+
+  <body>
+    <!-- Modals -->
+    <!-- Find and replace -->
+    <div class="modal fade" id="findreplacerest" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Find and replace (REST API)</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fas fa-times"
+                                                                                                      aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form
+                        method="post"
+                        id="find_replace_rest"
+                        action={{ url_for('rest_api.resttransformfindreplace') }}
+
+                >
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input
+                                    class="form-control "
+                                    type="text"
+                                    placeholder="Find"
+                                    name="Find"
+                                    required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                class="form-control "
+                                type="text"
+                                placeholder="Replace"
+                                name="Replace"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                    type="hidden"
+                                    name="colinfo"
+                                    id="colinfo"
+                                    value=""
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                    type="hidden"
+                                    name="opinfo"
+                                    id="opinfo"
+                                    value="findreplace"
+                            >
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button type="submit" class="btn btn-success btn-lg" style="width: 100%;"
+                                name="submit_findreplace" id="submit_findreplace"
+                                onclick="SubmitTransform(this)">
+                            <span
+                                class="fas fa-check"></span> Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Find and replace -->
+    <div class="modal fade" id="findreplace" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Find and replace</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fas fa-times"
+                                                                                                      aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form
+                        method="post"
+                        action={{ url_for('view_database', db_id= _dbname ) }}
+                                id="find_replace"
+                        enctype="multipart/form-data"
+                >
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input
+                                    class="form-control "
+                                    type="text"
+                                    placeholder="Find"
+                                    name="Find"
+                                    required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                class="form-control "
+                                type="text"
+                                placeholder="Replace"
+                                name="Replace"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                    type="hidden"
+                                    name="colinfo"
+                                    id="colinfo"
+                                    value=""
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                    type="hidden"
+                                    name="opinfo"
+                                    id="opinfo"
+                                    value="findreplace"
+                            >
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button type="submit" class="btn btn-success btn-lg" style="width: 100%;"><span
+                                class="fas fa-check"></span> Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Find and replace -->
+    <div class="modal fade" id="findreplacere" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Find and replace</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fas fa-times"
+                                                                                                      aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form
+                        method="post"
+                        action={{ url_for('view_database', db_id= _dbname ) }}
+                                id="find_replacere"
+                        enctype="multipart/form-data"
+                >
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input
+                                class="form-control "
+                                type="text"
+                                placeholder="Find"
+                                name="Find"
+                                required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                class="form-control "
+                                type="text"
+                                placeholder="Replace"
+                                name="Replace"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="colinfo"
+                                id="colinfo"
+                                value=""
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="opinfo"
+                                id="opinfo"
+                                value="findreplacere"
+                            >
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button type="submit" class="btn btn-success btn-lg" style="width: 100%;"><span
+                                class="fas fa-check"></span> Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Normalize -->
+    <div class="modal fade" id="normalize" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Normalize</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fas fa-times"
+                                                                                                      aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form
+                    method="post"
+                    action={{url_for('view_database', db_id= _dbname ) }}
+                    id="normalize_"
+                    enctype="multipart/form-data"
+                >
+                    <div class="modal-body">
+                        <h5>Normalize this column</h5>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="colinfo"
+                                id="colinfo"
+                                value=""
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="opinfo"
+                                id="opinfo"
+                                value="normalize"
+                            >
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button type="submit" class="btn btn-success btn-lg" style="width: 100%;"><span
+                                class="fas fa-check"></span> Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- One-hot-encode -->
+    <div class="modal fade" id="onehotenc" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Normalize</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fas fa-times"
+                                                                                                      aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form
+                    method="post"
+                    action={{url_for('view_database', db_id= _dbname ) }}
+                    id="one_hot_encode"
+                    enctype="multipart/form-data"
+                >
+                    <div class="modal-body">
+                        <h5>One-hot-encode this column</h5>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="colinfo"
+                                id="colinfo"
+                                value=""
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="opinfo"
+                                id="opinfo"
+                                value="one_hot_encode"
+                            >
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button type="submit" class="btn btn-success btn-lg" style="width: 100%;"><span
+                                class="fas fa-check"></span> Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Change attribute type -->
+    <div class="modal fade" id="changeattr" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Change type of attribute</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fas fa-times"
+                                                                                                      aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form
+                    method="post"
+                    action={{url_for('view_database', db_id= _dbname ) }}
+                    id="change_type"
+                    enctype="multipart/form-data"
+                >
+                    <div class="modal-body">
+                        <label class="container">
+                            <input
+                                type="radio"
+                                checked="checked"
+                                name="radio"
+                                id="ca_str"
+                                value="string"
+                            >
+                            <span class="checkmark"></span>
+                            <h5 style="display: inline">Text</h5>
+                        </label>
+                        <label class="container">
+                            <input
+                                type="radio"
+                                name="radio"
+                                id="ca_int"
+                                value="int"
+                            >
+                            <span class="checkmark"></span>
+                            <h5 style="display: inline">Integer</h5>
+                        </label>
+                        <label class="container">
+                            <input
+                                type="radio"
+                                name="radio"
+                                id="ca_float"
+                                value="float"
+                            >
+                            <span class="checkmark"></span>
+                            <h5 style="display: inline">Float</h5>
+                        </label>
+                        <label class="container">
+                            <input
+                                type="radio"
+                                name="radio"
+                                id="ca_dati"
+                                value="datetime"
+                            >
+                            <span class="checkmark"></span>
+                            <h5 style="display: inline">Date/Time</h5>
+                        </label>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="colinfo"
+                                id="colinfo"
+                                value=""
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="opinfo"
+                                id="opinfo"
+                                value="change_type"
+                            >
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button
+                                type="submit"
+                                class="btn btn-success btn-lg"
+                                style="width: 100%;"
+                        >
+                            <span class="fas fa-check"></span>
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Remove outliers-->
+    <div class="modal fade" id="remout" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Remove outliers</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fas fa-times"
+                                                                                                      aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form
+                        method="post"
+                        action={{ url_for('view_database', db_id= _dbname) }}
+                                id="remove_outliers"
+                        enctype="multipart/form-data"
+                >
+                    <div class="modal-body">
+                        <h5>X times standard deviation</h5>
+                        <div class="form-group">
+                            <input
+                                    class="form-control "
+                                    type="number"
+                                    id="range"
+                                    name="range"
+                                    value="3"
+                                    min="0"
+                                    required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                    type="hidden"
+                                    name="colinfo"
+                                    id="colinfo"
+                                    value=""
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                    type="hidden"
+                                    name="opinfo"
+                                    id="opinfo"
+                                    value="remove_outliers"
+                            >
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button
+                                type="submit"
+                                class="btn btn-success btn-lg"
+                                style="width: 100%;"
+                        >
+                            <span class="fas fa-check"></span>
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Discretize-->
+    <div class="modal fade" id="discretize" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Discretize</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fas fa-times"
+                                                                                                      aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form
+                    method="post"
+                    action={{url_for('view_database', db_id= _dbname ) }}
+                    id="discretize_xy"
+                    enctype="multipart/form-data"
+                >
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <h5>Number of bins</h5>
+                            <input
+                                type="number"
+                                placeholder="integer"
+                                id="nr_bins"
+                                name="nr_bins"
+                                autocomplete="off"
+                                pattern="\d*"
+                                value="2"
+                                min="2"
+                                onchange="changeNrInputs(this.value)"
+                                required
+                        >
+                        </div>
+                        <div class="form-group" id="discr_range_inputs" data-value="2">
+                            <h5>Boundaries between bins</h5>
+                            <div id="input_1">
+                                <input
+                                    class="form-control"
+                                    type="number"
+                                    name="input_1"
+                                    step="any"
+                                    required
+                                >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="colinfo"
+                                id="colinfo"
+                                value=""
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="opinfo"
+                                id="opinfo"
+                                value="discretize"
+                            >
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button
+                                type="submit"
+                                class="btn btn-success btn-lg"
+                                style="width: 100%;"
+                        >
+                            <span class="fas fa-check"></span>
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Discretize by equi-width-->
+    <div class="modal fade" id="equiwidth" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Discretize by equi-width</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fas fa-times"
+                                                                                                      aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form
+                    method="post"
+                    action={{url_for('view_database', db_id= _dbname ) }}
+                    id="discretize_width"
+                    enctype="multipart/form-data"
+                >
+                    <div class="modal-body">
+                        <h5>Number of bins</h5>
+                        <div class="form-group">
+                            <input
+                                class="form-control "
+                                type="number"
+                                placeholder="integer"
+                                id="nr_bins"
+                                name="nr_bins"
+                                value="2"
+                                min="2"
+                                pattern="\d*"
+                                required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="colinfo"
+                                id="colinfo"
+                                value=""
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="opinfo"
+                                id="opinfo"
+                                value="discr_equiwidth"
+                            >
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button
+                                type="submit"
+                                class="btn btn-success btn-lg"
+                                style="width: 100%;"
+                        >
+                            <span class="fas fa-check"></span>
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Discretize by equi-freq-->
+    <div class="modal fade" id="equifreq" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Discretize by equi-frequency</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fas fa-times"
+                                                                                                      aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form
+                    method="post"
+                    action={{url_for('view_database', db_id= _dbname ) }}
+                    id="discretize_freq"
+                    enctype="multipart/form-data"
+                >
+                    <div class="modal-body">
+                        <h5>Amount of bins</h5>
+                        <div class="form-group">
+                            <input
+                                class="form-control "
+                                type="number"
+                                placeholder="integer"
+                                id="nr_bins"
+                                name="nr_bins"
+                                value="2"
+                                min="2"
+                                pattern="\d*"
+                                required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="colinfo"
+                                id="colinfo"
+                                value=""
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="opinfo"
+                                id="opinfo"
+                                value="discr_equifreq"
+                            >
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button
+                                type="submit"
+                                class="btn btn-success btn-lg"
+                                style="width: 100%;"
+                        >
+                            <span class="fas fa-check"></span>
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Fill empty-->
+    <div class="modal fade" id="fillempty" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Fill empty fields</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fas fa-times"
+                                                                                                      aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form
+                    method="post"
+                    action={{url_for('view_database', db_id= _dbname ) }}
+                    id="fill_empty"
+                    enctype="multipart/form-data"
+                >
+                    <div class="modal-body">
+                        <label class="container">
+                            <input
+                                type="radio"
+                                checked="checked"
+                                name="radio"
+                                id="mean"
+                                value="mean"
+                            >
+                            <span class="checkmark"></span>
+                        Mean
+                        </label>
+                        <label class="container">
+                            <input
+                                type="radio"
+                                name="radio"
+                                id="median"
+                                value="median"
+                            >
+                            <span class="checkmark"></span>
+                        Median
+                        </label>
+                        <label class="container">
+                            <input
+                                type="radio"
+                                name="radio"
+                                id="value"
+                                value="value"
+                            >
+                            <span class="checkmark"></span>
+                        Value
+                        </label>
+                        <div class="form-group">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="replace_with"
+                                name="replace_with"
+                                title="replace_with"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="colinfo"
+                                id="colinfo"
+                                value=""
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="opinfo"
+                                id="opinfo"
+                                value="fill_empty"
+                            >
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button
+                                type="submit"
+                                class="btn btn-success btn-lg"
+                                style="width: 100%;"
+                        >
+                            <span class="fas fa-check"></span>
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Parse date/time -->
+    <div class="modal fade" id="parsedt" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Fill empty fields</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fas fa-times"
+                                                                                                      aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form
+                    method="post"
+                    action={{url_for('view_database', db_id= _dbname ) }}
+                    id="parse_dt"
+                    enctype="multipart/form-data"
+                >
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <h5>Extract from date/time</h5>
+                            <label class="container">
+                                <input
+                                    type="radio"
+                                    checked="checked"
+                                    name="radio"
+                                    id="extr_year"
+                                    value="extr_year"
+                                >
+                                <span class="checkmark"></span>
+                            Year
+                            </label>
+                            <label class="container">
+                                <input
+                                    type="radio"
+                                    name="radio"
+                                    id="extr_month"
+                                    value="extr_month"
+                                >
+                                <span class="checkmark"></span>
+                            Month
+                            </label>
+                            <label class="container">
+                                <input
+                                    type="radio"
+                                    name="radio"
+                                    id="extr_week"
+                                    value="extr_week"
+                                >
+                                <span class="checkmark"></span>
+                            Week
+                            </label>
+                            <label class="container">
+                                <input
+                                    type="radio"
+                                    name="radio"
+                                    id="extr_day"
+                                    value="extr_day"
+                                >
+                                <span class="checkmark"></span>
+                            Day
+                            </label>
+                            <label class="container">
+                                <input
+                                    type="radio"
+                                    name="radio"
+                                    id="extr_weekday"
+                                    value="extr_weekday"
+                                >
+                                <span class="checkmark"></span>
+                            Weekday
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <h5>Or round the date/time down</h5>
+                            <label class="container">
+                                <input
+                                    type="radio"
+                                    name="radio"
+                                    id="round_month"
+                                    value="round_M"
+                                >
+                                <span class="checkmark"></span>
+                            Month
+                            </label>
+                            <label class="container">
+                                <input
+                                    type="radio"
+                                    name="radio"
+                                    id="round_day"
+                                    value="round_D"
+                                >
+                                <span class="checkmark"></span>
+                            Day
+                            </label>
+                            <label class="container">
+                                <input
+                                    type="radio"
+                                    name="radio"
+                                    id="round_hour"
+                                    value="round_H"
+                                >
+                                <span class="checkmark"></span>
+                            Hour
+                            </label>
+                            <label class="container">
+                                <input
+                                    type="radio"
+                                    name="radio"
+                                    id="round_minute"
+                                    value="round_T"
+                                >
+                                <span class="checkmark"></span>
+                            Minute
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="colinfo"
+                                id="colinfo"
+                                value=""
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="hidden"
+                                name="opinfo"
+                                id="opinfo"
+                                value="parse_datetime"
+                            >
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button
+                                type="submit"
+                                class="btn btn-success btn-lg"
+                                style="width: 100%;"
+                        >
+                            <span class="fas fa-check"></span>
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="navBar">
+        <div class="container">
+            <a class="navbar-brand" href="/"><img class="img-responsive2"
+                                                  src="{{ url_for('static', filename='img/Logo.png' ) }}"></a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                    data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                Menu
+                <i class="fa fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index_base') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('database_base') }}">Databases</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('tables_base') }}">Table</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('contact_base') }}">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('settings_base') }}">Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        {% if logged %}
+                            <a class="nav-link" href="{{ url_for('security.logout') }}">Log out</a>
+                        {% else %}
+                            <a class="nav-link" href="{{ url_for('security.login') }}"> Log in</a>
+                            <a class="nav-link" href="{{ url_for('security.register') }}"> Register</a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Page Content -->
+    <div class="container-fluid">
+
+      <!-- Table credits to https://datatables.net/ -->
+      <table id="example" class="table table-striped table-bordered" style="width:100%">
+          <thead>
+          <tr>
+              {% for name, values in frame.iteritems() %}
+                  <div>
+                      <th class="dropdown">
+                          <button onclick="myFunction(this)" class="dropbtn"><i class="fas fa-cog"
+                                                                                style="pointer-events:none"></i></button>
+                      <div id="myDropdown" class="dropdown-content">
+                          <a
+                              class="open-transformation"
+                              href="#fillempty"
+                              data-toggle="modal"
+                              data-target="#fillempty"
+                              data-id="{{ name }}"
+                          >
+                              Fill empty fields
+                          </a>
+                          <a
+                              class="open-transformation"
+                              href="#findandplacerest"
+                              data-toggle="modal"
+                              data-target="#findreplacerest"
+                              data-id="{{ name }}"
+                          >
+                              Find and replace (REST api)
+                          </a>
+                          <a
+                              class="open-transformation"
+                              href="#findandreplace"
+                              data-toggle="modal"
+                              data-target="#findreplace"
+                              data-id="{{ name }}"
+                          >
+                              Find and replace
+                          </a>
+                          <a
+                              class="open-transformation"
+                              href="#findandreplacere"
+                              data-toggle="modal"
+                              data-target="#findreplacere"
+                              data-id="{{ name }}"
+                          >
+                              Find and replace with regex
+                          </a>
+                          <a
+                              class="open-transformation"
+                              href="#attribute"
+                              data-toggle="modal"
+                              data-target="#changeattr"
+                              data-id="{{ name }}"
+                          >
+                              Change Type Attribute
+                          </a>
+                          <a
+                              class="open-transformation"
+                              href="#ohc"
+                              data-toggle="modal"
+                              data-target="#onehotenc"
+                              data-id="{{ name }}"
+                          >
+                              One-Hot-encoding
+                          </a>
+                          <a
+                              class="open-transformation"
+                              href="#normalize"
+                              data-toggle="modal"
+                              data-target="#normalize"
+                              data-id="{{ name }}"
+                          >
+                              Normalize
+                          </a>
+                          <a
+                              class="open-transformation"
+                              href="#disequiwidth"
+                              data-toggle="modal"
+                              data-target="#equiwidth"
+                              data-id="{{ name }}"
+                          >
+                              Discretize by equi-width
+                          </a>
+                          <a
+                              class="open-transformation"
+                              href="#disequifreq"
+                              data-toggle="modal"
+                              data-target="#equifreq"
+                              data-id="{{ name }}"
+                          >
+                              Discretize by equi-frequency
+                          </a>
+                          <a
+                              class="open-transformation"
+                              href="#discretize"
+                              data-toggle="modal"
+                              data-target="#discretize"
+                              data-id="{{ name }}"
+                          >
+                              Discretize by range
+                          </a>
+                          <a
+                              class="open-transformation"
+                              href="#remove"
+                              data-toggle="modal"
+                              data-target="#remout"
+                              data-id="{{ name }}"
+                          >
+                              Remove outliers
+                          </a>
+                          <a
+                              class="open-transformation"
+                              href="#parse_datetime"
+                              data-toggle="modal"
+                              data-target="#parsedt"
+                              data-id="{{ name }}"
+                          >
+                              Edit date/time
+                          </a>
+                      </div>
+                  </th>
+              </div>
+              {% endfor %}
+          </tr>
+          {#
+          <tr>
+              <th><span class="inlinebar">1,1,1,1,1,1,1,1,1,1</span></th>
+              <th><span class="inlinebar">2,2,2,2,2,2,2</span></th>
+              <th><span class="inlinebar">1,1,1,1,1,1,1</span></th>
+              <th><span class="inlinebar">60,64,32,47,52,62,42,62</span></th>
+              <th><span class="inlinebar">1,3,4,5,3,5,57</span></th>
+              <th><span class="inlinebar">320,420,200,455,365,244,214,265</span></th>
+          </tr>#}
+            <tr>
+
+                  {% for thead in cols %}
+                      <th>{{ thead }}<!--<button id=fade type="submit" class="fas fa-arrow-up"></button><button id=fade2 type="submit"class="fas fa-arrow-down"></button>--></th>
+                  {% endfor %}
+
+                <th>Delete</th>
+            </tr>
+        </thead>
+
+                <tbody>
+
+                {% for idx, row in frame.iterrows() %}
+
+                    <tr>
+                        {% for elem in row %}
+                            <td> {{ elem }} </td>
+                        {% endfor %}
+                        <td>
+                            <button class="btn btn-danger btn-sm" style="float: right;"><i class="fas fa-times"></i></button>
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+                <tfoot>
+
+                <tr>
+
+                    {% for thead in cols %}
+                        <th> {{ thead }} </th>
+                    {% endfor %}
+                    <th>Delete</th>
+                </tr>
+
+                </tfoot>
+
+            </table>
+    </div>
+
+<footer>
+    <div class="container-fluid" id="foot">
+        <ul class="list-inline text-center">
+            <i class="fa fa-align-center"></i>
+        </ul>
+        <p style="color:white;">
+            <strong>History</strong>
+            <button style="color:white;"class="fas fa-undo"></button>
+        </p>
+        <p style="color:white;">
+          <i class="fa fa-arrow-right"> Deleted column 7</i>
+        </p>
+    </div>
+</footer>
+    <!-- /.container -->
+    <!-- Bootstrap core JavaScript -->
+
+    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ url_for('static', filename='js/test.js') }}"></script>
+
+  </body>
+
+</html>

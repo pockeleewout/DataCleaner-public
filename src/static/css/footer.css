@@ -1,0 +1,77 @@
+#foot {
+    position: fixed;
+    bottom:0px;
+    width: 99.1%;
+    height: 3%;
+    background-color: #343a40;
+    text-align: center;
+    -webkit-transition: height .3s ease;
+    transition: height .3s ease;
+}
+button {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: inherit;
+    transition: all .5s;
+}
+
+
+.btn-danger.btn-outline {
+    color: #d9534f;
+    margin-top:20px;
+    margin-right: 20px;
+}.btn-danger.btn-outline:hover {
+    color: #fff;
+}
+#foot:hover {
+  height: 20%;
+}
+
+p {
+  text-align: left;
+}
+
+.dropbtn {
+    background-color: #f1f1f1;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown a:hover {background-color: #ddd}
+
+.show {display:block;}

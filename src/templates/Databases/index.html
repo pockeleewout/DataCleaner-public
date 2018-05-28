@@ -1,0 +1,21 @@
+{% extends 'base_databases.html' %}
+{% set active_page = 'databases' %}
+
+{% block title %}
+    Databases | SDBC
+{% endblock %}
+
+{% block body %}
+
+    <!-- Page Content Holder -->
+    <div id="content">
+        <h2>Databases</h2>
+        <h3>Uploading a database</h3>
+          <p>Go to 'Upload' to upload a database. You can upload zip files, files with an .csv extension or SQL dumps. Adding a name for the table is a must and we can add an optional description.</p>
+          <p>In case of a zip file with multiple tables you will be redirected to a join table page where you need to join the tables in your zip file.</p>
+        <h3>My databases</h3>
+          <p>After succesfully uploading a database we can now see our database under this tab.</p>
+          <p>If we want to go to our table we press on the name. We can also edit and delete our database.</p>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title> {% set title = title|default('Error') %}</title>
+
+    <!-- Bootstrap core CSS -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="{{ url_for('static', filename='css/customerror.css') }}" rel="stylesheet">
+</head>
+<body>
+<div id="centererror" class="container h-100">
+    <div class="row justify-content-center align-items-center">
+        {% block headerone %}
+
+        {% endblock %}
+    </div>
+    <div class="row justify-content-center align-items-center">
+        {% block headertwo %}
+
+        {% endblock %}
+    </div>
+    <div class="row justify-content-center align-items-center">
+        {% block image %}
+            <img src="{{ url_for('static', filename='img/wall-e.png' ) }}" ALT="some text" WIDTH=30%
+                 HEIGHT=30%>
+        {% endblock %}
+
+    </div>
+    <div class="row justify-content-center align-items-center">
+        {% block text %}
+
+        {% endblock %}
+    </div>
+    {% block home %}
+    <div class="row justify-content-center align-items-center">
+        <a href="{{ url_for('index_base') }}" class="link btn">Go Home</a>"
+    </div>
+    {% endblock %}
+</div>
+
+<!-- Bootstrap core JavaScript -->
+<script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

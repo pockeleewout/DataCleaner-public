@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SDBC 5000 Table</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='vendor/font-awesome/css/font-awesome.min.css') }}"
+          rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css"
+          integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S"
+          crossorigin="anonymous">
+    <script src="{{ url_for('static', filename='js/dropdown.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/logo-nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/jquery.sparkline.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
+
+
+    <script type="text/javascript">
+            $(function () {
+                /** This code runs when everything has been loaded on the page */
+                /* Inline sparklines take their values from the contents of the tag */
+                $('.inlinesparkline').sparkline();
+{#
+
+                /* Sparklines can also take their values from the first argument
+                passed to the sparkline() function */
+                var myvalues = [10, 8, 5, 7, 4, 4, 1];
+                $('.dynamicsparkline').sparkline(myvalues);
+
+                /* The second argument gives options such as chart type */
+                $('.dynamicbar').sparkline(myvalues, {type: 'bar', barColor: 'green'});
+
+                /* Use 'html' instead of an array of values to pass options
+                to a sparkline with data in the tag */
+                $('.inlinebar').sparkline('html', {type: 'bar', barColor: 'blue', height: 'auto'});
+#}
+
+            });
+    </script>
+    <script>
+        table_id = "{{ table_id }}";
+    </script>
+</head>
+
+<body>
+<!-- Modals -->
+<!-- Find and replace -->
+<div class="modal fade" id="findreplace" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title custom_align">Find and replace</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <!--<form method="post" action="{{ url_for('view_database', db_id=_dbname ) }}"-->
+            <form method="post" action="{{ url_for('rest_api.resttransformfindreplace') }}" class="trans_form"
+                  enctype="multipart/form-data" data-id="{{ _dbname }}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input class="form-control " type="text" placeholder="Find" name="Find" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control " type="text" placeholder="Replace" name="Replace">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="colinfo" id="colinfo" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="opinfo" id="opinfo" value="findreplace">
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">
+                        <span class="fas fa-check"></span>
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Find and replace with regex -->
+<div class="modal fade" id="findreplacere" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title custom_align">Find and replace with regex</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <!--<form method="post" action="{{ url_for('view_database', db_id= _dbname ) }}"-->
+            <form method="post" action="{{ url_for('rest_api.resttransformfindreplaceregex') }}" class="trans_form"
+                  enctype="multipart/form-data" data-id="{{ _dbname }}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input class="form-control " type="text" placeholder="Find" name="Find" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control " type="text" placeholder="Replace" name="Replace">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="colinfo" id="colinfo" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="opinfo" id="opinfo" value="findreplacere">
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">
+                        <span class="fas fa-check"></span>
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Normalize -->
+<div class="modal fade" id="normalize" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title custom_align">Normalize</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <!--<form method="post" action="{{ url_for('view_database', db_id=_dbname ) }}"-->
+            <form method="post" action="{{ url_for('rest_api.resttransformnormalize') }}" class="trans_form"
+                  enctype="multipart/form-data" data-id="{{ _dbname }}">
+                <div class="modal-body">
+                    <h5>Normalize this column</h5>
+                    <div class="form-group">
+                        <input type="hidden" name="colinfo" id="colinfo" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="opinfo" id="opinfo" value="normalize">
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">
+                        <span class="fas fa-check"></span>
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- One-hot-encode -->
+<div class="modal fade" id="onehotenc" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title custom_align">One-hot encode</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <!--<form method="post" action="{{ url_for('view_database', db_id=_dbname ) }}"-->
+            <form method="post" action="{{ url_for('rest_api.resttransformonehotencoding') }}" class="trans_form"
+                  enctype="multipart/form-data" data-id="{{ _dbname }}">
+                <div class="modal-body">
+                    <h5>One-hot-encode this column</h5>
+                    <div class="form-group">
+                        <label class="container">
+                            <input type="checkbox" name="use_old">
+                            <h5 style="display: inline">Include column name in new column names</h5>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="colinfo" id="colinfo" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="opinfo" id="opinfo" value="one_hot_encode">
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;"><span
+                            class="fas fa-check"></span> Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Change attribute type -->
+<div class="modal fade" id="changeattr" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title custom_align">Change type of attribute</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <!--<form method="post" action="{{ url_for('view_database', db_id=_dbname ) }}"-->
+            <form method="post" action="{{ url_for('rest_api.resttransformchangetype') }}" class="trans_form"
+                  enctype="multipart/form-data" data-id="{{ _dbname }}">
+                <div class="modal-body">
+                    <label class="container">
+                        <input type="radio" checked="checked" name="radio" id="ca_str" value="string">
+                        <span class="checkmark"></span>
+                        <font size="5">Text</font>
+                    </label>
+                    <label class="container">
+                        <input type="radio" name="radio" id="ca_int" value="int">
+                        <span class="checkmark"></span>
+                        <font size="5">Integer</font>
+                    </label>
+                    <label class="container">
+                        <input type="radio" name="radio" id="ca_float" value="float">
+                        <span class="checkmark"></span>
+                        <font size="5">Float</font>
+                    </label>
+                    <label class="container">
+                        <input type="radio" name="radio" id="ca_dati" value="datetime">
+                        <span class="checkmark"></span>
+                        <font size="5">Date/Time</font>
+                    </label>
+                    <div class="form-group">
+                        <input type="hidden" name="colinfo" id="colinfo" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="opinfo" id="opinfo" value="change_type">
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;"><span
+                            class="fas fa-check"></span> Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Remove outliers-->
+<div class="modal fade" id="remout" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title custom_align">Remove outliers</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <!--<form method="post" action="{{ url_for('view_database', db_id=_dbname) }}"-->
+            <form method="post" action="{{ url_for('rest_api.resttransformremoveoutliers') }}" class="trans_form"
+                  enctype="multipart/form-data" data-id="{{ _dbname }}">
+                <div class="modal-body">
+                    <h5>X times standard deviation</h5>
+                    <div class="form-group">
+                        <input class="form-control " type="number" step="any" name="range" value="3" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="colinfo" id="colinfo" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="opinfo" id="opinfo" value="remove_outliers">
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">
+                        <span class="fas fa-check"></span>
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Discretize-->
+<div class="modal fade" id="discretize" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title custom_align">Discretize</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <!--<form method="post" action="{{ url_for('view_database', db_id=_dbname ) }}"-->
+            <form method="post" action="{{ url_for('rest_api.resttransformdiscretizeranges') }}" class="trans_form"
+                  enctype="multipart/form-data" data-id="{{ _dbname }}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <h5>Number of bins</h5>
+                        <input type="number" placeholder="integer" id="nr_bins" name="nr_bins" autocomplete="off"
+                               pattern="\d*" value="2" min="2" onchange="changeNrInputs(this.value)" required>
+                    </div>
+                    <div class="form-group" id="discr_range_inputs" data-value="2">
+                        <h5>Boundaries between bins</h5>
+                        <div id="input_1">
+                            <input class="form-control" type="number" name="input_1" step="any" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="colinfo" id="colinfo" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="opinfo" id="opinfo" value="discretize">
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">
+                        <span class="fas fa-check"></span>
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Discretize by equi-width-->
+<div class="modal fade" id="equiwidth" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title custom_align">Discretize by equi-width</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <!--<form method="post" action="{{ url_for('view_database', db_id=_dbname ) }}"-->
+            <form method="post" action="{{ url_for('rest_api.resttransformdiscretizeequidistance') }}" class="trans_form"
+                  enctype="multipart/form-data" data-id="{{ _dbname }}">
+                <div class="modal-body">
+                    <h5>Number of bins</h5>
+                    <div class="form-group">
+                        <input class="form-control " type="number" placeholder="integer" id="nr_bins" name="nr_bins"
+                               value="2" min="2" pattern="\d*" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="colinfo" id="colinfo" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="opinfo" id="opinfo" value="discr_equiwidth">
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">
+                        <span class="fas fa-check"></span>
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Discretize by equi-freq-->
+<div class="modal fade" id="equifreq" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title custom_align">Discretize by equi-frequency</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <!--<form method="post" action="{{ url_for('view_database', db_id=_dbname ) }}"-->
+            <form method="post" action="{{ url_for('rest_api.resttransformdiscretizeequifrequency') }}" class="trans_form"
+                  enctype="multipart/form-data" data-id="{{ _dbname }}">
+                <div class="modal-body">
+                    <h5>Amount of bins</h5>
+                    <div class="form-group">
+                        <input class="form-control " type="number" placeholder="integer" id="nr_bins" name="nr_bins"
+                               value="2" min="2" pattern="\d*" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="colinfo" id="colinfo" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="opinfo" id="opinfo" value="discr_equifreq">
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">
+                        <span class="fas fa-check"></span>
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Fill empty-->
+<div class="modal fade" id="fillempty" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title custom_align">Fill empty fields</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <!--<form method="post" action="{{ url_for('view_database', db_id= _dbname ) }}"-->
+            <form method="post" action="{{ url_for('rest_api.resttransformfillempty') }}" class="trans_form"
+                  enctype="multipart/form-data" data-id="{{ _dbname }}">
+                <div class="modal-body">
+                    <label class="container">
+                        <input type="radio" checked="checked" name="radio" id="mean" value="mean">
+                        <span class="checkmark"></span>
+                        <font size="5">Mean</font>
+                    </label>
+                    <label class="container">
+                        <input type="radio" name="radio" id="median" value="median">
+                        <span class="checkmark"></span>
+                        <font size="5">Median</font>
+                    </label>
+                    <label class="container">
+                        <input type="radio" name="radio" id="value" value="value">
+                        <span class="checkmark"></span>
+                      <font size="5">Value</font>
+                    </label>
+                    <div class="form-group">
+                        <input class="form-control" type="text" id="replace_with" name="replace_with"
+                               title="replace_with">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="colinfo" id="colinfo" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="opinfo" id="opinfo" value="fill_empty">
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">
+                        <span class="fas fa-check"></span>
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Parse date/time -->
+<div class="modal fade" id="parsedt" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title custom_align">Fill empty fields</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <!--<form method="post" action="{{ url_for('view_database', db_id= _dbname ) }}"-->
+            <form method="post" action="{{ url_for('rest_api.resttransformextractdatetime') }}" class="trans_form"
+                  enctype="multipart/form-data" data-id="{{ _dbname }}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <h5>Extract from date/time</h5>
+                        <label class="container">
+                            <input type="radio" checked="checked" name="radio" id="extr_year"
+                                   value="extr_year">
+                            <span class="checkmark"></span>
+                            <font size="5">Year</font>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="radio" id="extr_month" value="extr_month">
+                            <span class="checkmark"></span>
+                            <font size="5">Month</font>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="radio" id="extr_week" value="extr_week">
+                            <span class="checkmark"></span>
+                            <font size="5">Week</font>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="radio" id="extr_day" value="extr_day">
+                            <span class="checkmark"></span>
+                            <font size="5">Day</font>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="radio" id="extr_weekday" value="extr_weekday">
+                            <span class="checkmark"></span>
+                            <font size="5">Weekday</font>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="colinfo" id="colinfo" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="opinfo" id="opinfo" value="parse_datetime">
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">
+                        <span class="fas fa-check"></span>
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- delete -->
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title custom_align">Delete</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <form method="post" action="{{ url_for('rest_api.resttransformdelete') }}" class="trans_form"
+                  enctype="multipart/form-data" data-id="{{ _dbname }}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <h5>Predicate</h5>
+                        <input title="" class="form-control" type="text" name="predicate" required>
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">
+                        <span class="fas fa-check"></span>
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Deduplication -->
+<div class="modal fade" id="deduplication" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title custom_align">Deduplication</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <!--<form method="post" action="{{ url_for('rest_api.resttransformdeduplication') }}" class="trans_form"-->
+            <form method="post" action="{{url_for('view_database', db_id=_dbname ) }}"
+                  enctype="multipart/form-data" data-id="{{ _dbname }}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <h5>Highest acceptable edit distance</h5>
+                        <input class="form-control" type="number" id="edit_distance" name="edit_distance" value="2"
+                               min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="colinfo" id="colinfo" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="opinfo" id="opinfo" value="deduplication">
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">
+                        <span class="fas fa-check"></span>
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% if duplicates is defined %}
+<!-- Deduplication -->
+<div class="modal fade" id="dedupe_result" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title custom_align">Deduplication</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <!--<form method="post" action="{{ url_for('rest_api.resttransformdeduplicationresult') }}" class="trans_form"-->
+            <form method="post" action="{{url_for('view_database', db_id= _dbname ) }}"
+                  enctype="multipart/form-data" data-id="{{ _dbname }}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        {% if duplicates %}
+                            <h5>
+                                Strings that should be replaced can be marked using the checkboxes on the left.
+                                The dropdown menus on the right have all options within the acceptable edit distance.
+                            </h5>
+                            <table class="col-md-12 col-sm-12 col-xs-12">
+                                {% for string, dups in duplicates.items() %}
+                                    <tr>
+                                        <td>
+                                            <input class="form" type="checkbox" name="replace_{{ loop.index }}"
+                                                   {% if string != dups[0] %} checked {% endif %}>
+                                        </td>
+                                        <td>
+                                            <input class="form-control" type="text" name="string_{{ loop.index }}"
+                                                   value="{{ string }}" readonly>
+                                        </td>
+                                        <td align="middle">
+                                            <span class="fa fa-arrow-right"></span>
+                                        </td>
+                                        <td>
+                                            <select class="selectpicker form-control" data-style="btn-primary"
+                                                    name="replacement_{{ loop.index }}">
+                                                {% for dup in dups %}
+                                                    {% if dup != string %}
+                                                        <option>{{ dup }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                <tr><td> </td></tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form" name="chain">
+                                    </td>
+                                    <td colspan="3" align="left">
+                                        Chain replacements (if A is set to be replaced by B and B by C,
+                                        then A will instead be replaced by C)
+                                    </td>
+                                </tr>
+                            </table>
+                            <input type="hidden" name="nr_strings" value="{{ duplicates|length }}">
+                        {% else %}
+                            <h5>Nothing found</h5>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="colinfo" id="colinfo" value="{{ col }}">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="opinfo" id="opinfo" value="dedupe_result">
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">
+                        <span class="fas fa-check"></span>
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="navBar">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img class="img-responsive2" src="{{ url_for('static', filename='img/Logo.png' ) }}">
+        </a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation">
+            Menu
+            <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index_base') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('database_base') }}">Databases</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('contact_base') }}">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('settings_base') }}">Settings</a>
+                </li>
+                <li class="nav-item">
+                    {% if logged %}
+                        <a class="nav-link" href="{{ url_for('security.logout') }}">Log out</a>
+                    {% else %}
+                        <a class="nav-link" href="{{ url_for('security.login') }}"> Log in</a>
+                        <a class="nav-link" href="{{ url_for('security.register') }}"> Register</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Page Content -->
+<div class="container-fluid">
+    <a class="btn btn-danger btn-outline btn-xs float-right open-transformation"  href="#delete" data-id="delete" data-toggle="modal" data-target="#delete">Delete row</a>
+    <!-- Table credits to https://datatables.net/ -->
+    <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+        <tr>
+            {% for name in cols %}
+                <th class="dropdown">
+                    <div>
+                        <button onclick="myFunction(this)" class="dropbtn">
+                            <i class="fas fa-cog" style="pointer-events:none"></i>
+                        </button>
+                        <div id="myDropdown" class="dropdown-content">
+                            <a class="open-transformation" href="#fillempty" data-toggle="modal"
+                               data-target="#fillempty" data-id="{{ name }}">
+                                Fill empty fields
+                            </a>
+                            <a class="open-transformation" href="#findandreplace" data-toggle="modal"
+                               data-target="#findreplace" data-id="{{ name }}">
+                                Find and replace
+                            </a>
+                            <a class="open-transformation" href="#findandreplacere" data-toggle="modal"
+                               data-target="#findreplacere" data-id="{{ name }}">
+                                Find and replace with regex
+                            </a>
+                            <a class="open-transformation" href="#attribute" data-toggle="modal"
+                               data-target="#changeattr" data-id="{{ name }}">
+                                Change Type Attribute
+                            </a>
+                            <a class="open-transformation" href="#ohc" data-toggle="modal"
+                               data-target="#onehotenc" data-id="{{ name }}">
+                                One-Hot-encoding
+                            </a>
+                            <a class="open-transformation" href="#normalize" data-toggle="modal"
+                               data-target="#normalize" data-id="{{ name }}">
+                                Normalize
+                            </a>
+                            <a class="open-transformation" href="#disequiwidth" data-toggle="modal"
+                               data-target="#equiwidth" data-id="{{ name }}">
+                                Discretize by equi-width
+                            </a>
+                            <a class="open-transformation" href="#disequifreq" data-toggle="modal"
+                               data-target="#equifreq" data-id="{{ name }}">
+                                Discretize by equi-frequency
+                            </a>
+                            <a class="open-transformation" href="#discretize" data-toggle="modal"
+                               data-target="#discretize" data-id="{{ name }}">
+                                Discretize by range
+                            </a>
+                            <a class="open-transformation" href="#remove" data-toggle="modal"
+                               data-target="#remout" data-id="{{ name }}">
+                                Remove outliers
+                            </a>
+                            <a class="open-transformation" href="#parse_datetime" data-toggle="modal"
+                               data-target="#parsedt" data-id="{{ name }}">
+                                Edit date/time
+                            </a>
+                            <a class="open-transformation" href="#deduplication" data-toggle="modal"
+                               data-target="#deduplication" data-id="{{ name }}">
+                                Deduplication
+                            </a>
+                        </div>
+                    </div>
+                </th>
+            {% endfor %}
+        </tr>
+        {% if graph_data is defined %}
+        <tr>
+            {% for data in graph_data %}
+            <th>
+                <span class="inlinesparkline">{{ ",".join(data) }}</span>
+            </th>
+            {% endfor %}
+        </tr>
+        {% endif %}
+        <tr>
+            {% for thead in cols %}
+                <th>
+                    {{ thead }}
+                    <!--<button id=fade type="submit" class="fas fa-arrow-up"></button>
+                    <button id=fade2 type="submit"class="fas fa-arrow-down"></button>-->
+                </th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+        <tr>
+            {% for thead in cols %}
+                <th> {{ thead }} </th>
+            {% endfor %}
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+<footer>
+    <div class="container-fluid" id="foot">
+        <ul class="list-inline text-center">
+            <i class="fa fa-align-center"></i>
+        </ul>
+        <form method="post" action="{{ url_for('rest_api.resttransformundo') }}" class="trans_form"
+              data-id="{{ _dbname }}" enctype="multipart/form-data">
+            <p style="color:white;">
+                <strong class="col-md-2">History</strong>
+                <button type="submit" style="color:white;" class="fas fa-undo col-md-1"
+                        {% if history|length == 1 %}disabled{% endif %}></button>
+            </p>
+        </form>
+        <p style="color:white;">
+            {% for entry in history %}
+                <i class="fa fa-arrow-right"> {{ entry }}</i><br>
+            {% endfor %}
+        </p>
+    </div>
+</footer>
+<!-- /.container -->
+<!-- Bootstrap core JavaScript -->
+
+<script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+<script src="{{ url_for('static', filename='js/test.js') }}"></script>
+
+{% if duplicates is defined %}
+    <script src="{{ url_for('static', filename='js/deduperesults.js') }}"></script>
+{% endif %}
+
+</body>
+
+</html>

@@ -1,0 +1,289 @@
+/*
+    DEMO STYLE
+*/
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+
+body {
+    font-family: 'Josefin Sans', sans-serif;
+    background: #fafafa;
+}
+
+p {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999;
+}
+
+a, a:hover, a:focus {
+    font-family: 'Josefin Sans', sans-serif;
+    color: rgba(255,255,255,.5);;
+    font-weight: 800;
+    font-size: 12px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+#linkcolor {
+  color: black;
+  text-transform: none;
+  font-size: 18px;
+}
+.navbar {
+    padding: 15px 10px;
+    background: #fff;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 40px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-btn {
+    box-shadow: none;
+    outline: none !important;
+    border: none;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #ddd;
+    margin: 40px 0;
+}
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+.wrapper {
+    display: flex;
+    align-items: stretch;
+    perspective: 1500px;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background-color: #353942;
+    color: rgba(255,255,255,.5);
+    transition: all 0.6s cubic-bezier(0.945, 0.020, 0.270, 0.665);
+    transform-origin: bottom left;
+
+
+}
+
+#sidebar.active {
+    margin-left: -250px;
+    transform: rotateY(100deg);
+}
+
+#sidebar .sidebar-header {
+    padding: 10px;
+
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #fff;
+}
+
+#sidebar ul p {
+    color: rgba(255,255,255,.5);
+    padding: 10px;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    display: block;
+}
+#sidebar ul li a:hover {
+    color: rgba(255,255,255,.5);
+    background: #fff;
+}
+
+#sidebar ul li.active > a, a[aria-expanded="true"] {
+    color: rgba(255,255,255,.5);
+    background: #11324F;
+}
+
+@font-face {
+font-family: "FontAwesome";
+font-weight: normal;
+font-style : normal;
+       src : url("https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.eot?v=4.3.0");
+       src : url("https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.eot?#iefix&v=4.3.0") format("embedded-opentype"),
+             url("https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.woff2?v=4.3.0") format("woff2"),
+             url("https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.woff?v=4.3.0") format("woff"),
+             url("https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.ttf?v=4.3.0") format("truetype"),
+             url("https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.svg?v=4.3.0#fontawesomeregular") format("svg");
+}
+}
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+a[aria-expanded="false"]::before, a[aria-expanded="true"]::before {
+    content: "\f062";
+    display: block;
+    position: absolute;
+    right: 20px;
+    font-family: 'FontAwesome';
+    font-size: 0.6em;
+}
+a[aria-expanded="true"]::before {
+    content: "\f063";
+}
+
+
+ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #11324F;
+}
+
+
+a.article, a.article:hover {
+    background: #6d7fcc !important;
+    color: #fff !important;
+}
+
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+#content {
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+#sidebarCollapse {
+    width: 40px;
+    height: 40px;
+    background: #f5f5f5;
+}
+
+#sidebarCollapse span {
+    width: 80%;
+    height: 2px;
+    margin: 0 auto;
+    display: block;
+    background: #555;
+    transition: all 0.8s cubic-bezier(0.810, -0.330, 0.345, 1.375);
+    transition-delay: 0.2s;
+}
+
+#sidebarCollapse span:first-of-type {
+    transform: rotate(45deg) translate(2px, 2px);
+}
+#sidebarCollapse span:nth-of-type(2) {
+    opacity: 0;
+}
+#sidebarCollapse span:last-of-type {
+    transform: rotate(-45deg) translate(1px, -1px);
+}
+
+
+#sidebarCollapse.active span {
+    transform: none;
+    opacity: 1;
+    margin: 5px auto;
+}
+/* ---------------------------------------------------
+    UPLOAD AND DROP
+----------------------------------------------------- */
+.files input {
+
+    outline: 2px dashed #92b0b3;
+    outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    padding: 120px 0px 85px 35%;
+    text-align: center !important;
+    margin: 0;
+    width: 120% !important;
+}
+.files input:focus{     outline: 2px dashed #92b0b3;  outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear; border:1px solid #92b0b3;
+ }
+.files{ position:relative}
+.files:after {  pointer-events: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 50px;
+    right: 0;
+    height: 56px;
+    content: "";
+    background-image: url(https://image.flaticon.com/icons/png/128/109/109612.png);
+    display: block;
+    margin: 0 auto;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+.color input{ background-color:#f1f1f1;}
+.files:before {
+    position: absolute;
+    bottom: 10px;
+    left: 0;  pointer-events: none;
+    width: 100%;
+    right: 0;
+    height: 57px;
+    content: " or drag it here. ";
+    display: block;
+    margin: 0 auto;
+    color: #52527a;
+    font-weight: 600;
+    text-transform: capitalize;
+    text-align: center;
+}
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+        transform: rotateY(90deg);
+    }
+    #sidebar.active {
+        margin-left: 0;
+        transform: none;
+    }
+    #sidebarCollapse span:first-of-type,
+    #sidebarCollapse span:nth-of-type(2),
+    #sidebarCollapse span:last-of-type {
+        transform: none;
+        opacity: 1;
+        margin: 5px auto;
+    }
+    #sidebarCollapse.active span {
+        margin: 0 auto;
+    }
+    #sidebarCollapse.active span:first-of-type {
+        transform: rotate(45deg) translate(2px, 2px);
+    }
+    #sidebarCollapse.active span:nth-of-type(2) {
+        opacity: 0;
+    }
+    #sidebarCollapse.active span:last-of-type {
+        transform: rotate(-45deg) translate(1px, -1px);
+    }
+
+}
+
+.contents {
+    width: 400px;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.contents img {
+    margin-right: 15px;
+    float: left;
+}

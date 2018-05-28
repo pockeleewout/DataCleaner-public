@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base_error.html' %}
+{% block headerone %}
+    <h1>401</h1>
+{% endblock %}
+{% block headertwo %}
+    <h2>Unauthorized</h2>
+{% endblock %}
+
+{% block text %}
+    <p>Sorry, you lack the necessary authentication to visit this page.</p>
+{% endblock %}
+</html>

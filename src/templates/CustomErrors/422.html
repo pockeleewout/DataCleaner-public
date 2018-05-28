@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base_error.html' %}
+{% block headerone %}
+    <h1>422</h1>
+{% endblock %}
+{% block headertwo %}
+    <h2> Unprocessable Entity</h2>
+{% endblock %}
+
+{% block text %}
+    <p> We were unable to process the instructions contained in your request! </p>
+{% endblock %}
+{% block image %}
+<img src="{{ url_for('static', filename='img/backgrounds/error_422.gif' ) }}" ALT="some text" WIDTH=30% HEIGHT=30%>
+{% endblock %}
+</html>
+</html>

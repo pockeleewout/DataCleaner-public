@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base_error.html' %}
+{% block headerone %}
+    <h1>404</h1>
+{% endblock %}
+{% block headertwo %}
+    <h2>Not Found</h2>
+{% endblock %}
+
+{% block text %}
+    <p>You might have typed in the wrong URL or don't have privileges to view this file.</p>
+{% endblock %}
+{% block image %}
+<img src="{{ url_for('static', filename='img/backgrounds/error.gif' ) }}" ALT="some text" WIDTH=30% HEIGHT=30%>
+{% endblock %}
+</html>

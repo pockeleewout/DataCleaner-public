@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% extends 'base.html' %}
+{% set active_page = 'testing' %}
+
+{% block extends_css %}
+    <!-- form-elements css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form-elements.css') }}">
+
+    <link href="{{ url_for('static', filename='css/register.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+
+    <div id="login">
+        <div class="left">
+            <h1>Register</h1>
+            <input type="text" name="username" placeholder="Username"/>
+            <input type="text" name="email" placeholder="E-mail"/>
+            <input type="password" name="password" placeholder="Password"/>
+            <input type="password" name="retype" placeholder="Retype password"/>
+            <input type="submit" name="submit" value="Register"/>
+        </div>
+        <div class="right">
+            <span class="loginmedia">Sign in with </br >social network</span>
+
+            <button class="loginm facebook">Log in with Facebook</button>
+            <button class="loginm twitter">Log in with Twitter</button>
+            <button class="loginm google">Log in with Google+</button>
+        </div>
+        <div class="OR">OR</div>
+    </div>
+    <!-- Javascript -->
+
+    <!--jQuery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Popper Js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <!-- Bootstrap Js CDN -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+    <!-- Custom scripts -->
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <!--[if lt IE 10]>
+      <script src="{{url_for('static', filename='js/placeholder.js')}}"></script>
+      <![endif]-->
+{% endblock %}
+</html>

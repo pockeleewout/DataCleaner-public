@@ -1,0 +1,111 @@
+{% extends 'base_databases.html' %}
+{% set active_page = 'join' %}
+
+{% block title %}
+    Join Tables| SDBC
+{% endblock %}
+
+{% block extends_css %}
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.0/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jointable.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<!-- Page Content Holder -->
+<div id="content">
+    <!-- HIDDEN DYNAMIC ELEMENT TO CLONE -->
+    <!-- you can replace it with any other elements -->
+    <div class="form-group dynamic-element" style="display:none">
+        <div class="row">
+            <!--<div class="col-md-2"></div>-->
+            <!-- Replace these fields -->
+            <div class="col-md-5 left-col select_1"></div>
+            <div class="col-md-5 right-col select_2"></div>
+            <!-- End of fields-->
+            <!--<div class="col-md-3">-->
+                <!--<input type="text" class="name_joined col-md-12" required>-->
+            <!--</div>-->
+            <div class="col-md-1">
+                <p class="delete col-md-12">x</p>
+            </div>
+        </div>
+    </div>
+    <!-- END OF HIDDEN ELEMENT -->
+    <!-- HIDDEN CONTAINER OF SELECTS TO CLONE -->
+    <div class="container" hidden>
+        {% for table, column_list in columns.items() %}
+            <div id="{{ table }}">
+                <select title="" class="col-md-12">
+                    {% for column in column_list %}
+                        <option value="{{ column }}">{{ column }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endfor %}
+    </div>
+    <!-- END OF HIDDEN CONTAINER-->
+
+    <div>
+        <form class="form-horizontal join_form" data-id="{{ _dbname }}"
+              action="{{ url_for('rest_api.resttransformjoin') }}" method="post">
+            <fieldset>
+                <!-- Form Name -->
+                <legend class="title">Join tables</legend>
+                <div id="top">
+                    <select title="" id="table_1" name="table[]" class="selectpicker show-menu-arrow">
+                        {% for name, id in tables.items() %}
+                            <option value="{{ id }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="top">
+                    <select title="" id="table_2" name="table[]" class="selectpicker show-menu-arrow">
+                        {% for name, id in tables.items() %}
+                            <option value="{{ id }}" selected>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!--<div id="top">-->
+                    <!--Name for new column-->
+                <!--</div>-->
+                <hr>
+                <div class="dynamic-stuff">
+                <!-- Dynamic element will be cloned here -->
+                <!-- You can call clone function once if you want it to show it a first element-->
+                </div>
+
+                <!-- Button -->
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="add-one">+ Add another join</p>
+                        </div>
+                        <div class="col-md-12">
+                            Name of the joined table:
+                            <input type="text" id="table_name" required>
+                        </div>
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                            <button id="singlebutton" name="singlebutton" class="btn btn-primary">Join tables</button>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extends_js %}
+
+    <script src="{{ url_for('static', filename='js/dropdown.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jointable.js') }}"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.0/js/bootstrap-select.min.js"></script>
+
+
+{% endblock %}

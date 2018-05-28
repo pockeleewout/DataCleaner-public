@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+
+{% include "security/_messages.html" %}
+
+
+<a href="/login">Login</a><br/>
+<a href="/logout">Logout</a><br/>
+<a href="/register">Register</a><br/>
+<a href="/database">Databases</a><br/>
+<a href="/database/upload">Upload a database</a><br/>
+<a href={{ url_for("test") }}>Protected</a><br/>
+
+</body>
+</html>

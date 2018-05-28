@@ -1,0 +1,252 @@
+{% extends 'base_databases.html' %}
+{% set active_page = 'mydb' %}
+
+{% block title %}
+    My Databases | SDBC
+{% endblock %}
+
+{% block extends_meta %}
+    <meta id="uid" data-name="{{ user.id }}">
+    <meta id="url_databases" data-url="{{ url_for('rest_api.restuserdatabase', user_id=user.id) }}">
+    <meta id="url_view" data-url="{{ url_for('view_database', db_id='NIL') }}">
+{% endblock %}
+
+{% block modals %}
+
+<!-- Modals credits to https://bootsnipp.com/mohsinirshad -->
+    <div class="modal fade" id="users" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">List of users</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <span class="fas fa-times" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form method="post" action="" id="edit_detail"
+                      enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="input-group">
+                            <input class="form-control " type="text" placeholder="Name" name="name" id="name">
+                            <span class="input-group-btn">
+                                <button class="btn btn-success fas fa-plus" type="button"
+                                        style="height:100%;"></button>
+                            </span>
+                        </div>
+
+                        <div>
+                            <ul>
+                                <li>darinv</li>
+                                <li>lucasdb</li>
+                                <li>ewoutp</li>
+                                <li>anthonyvh</li>
+                                <li>julesds</li>
+                            </ul>
+                        </div>
+                        <div class="modal-footer ">
+                            <button type="submit" class="btn btn-warning btn-lg" style="width: 100%;">
+                                <span class="fas fa-check"></span> Update
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Edit Your Detail</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <span class="fas fa-times" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form method="post"
+                      action="{{ url_for('rest_api.restdatabasebyid', data_id='NIL') }}"
+                      id="edit_detail"
+                      class="json_form"
+                      enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input class="form-control " type="text" placeholder="Name" name="name" id="name">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control " type="text" placeholder="Description"
+                                   name="description" id="description">
+                        </div>
+                        <div class="form-group">
+                            <textarea rows="2" class="form-control" placeholder="Created by" name="created_by"
+                                      id="created_by"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="data_id" id="data_id" value="">
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button type="submit" class="btn btn-warning btn-lg" style="width: 100%;">
+                            <span class="fas fa-check"></span> Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <span class="fas fa-times" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger">
+                        <span class="fas fa-exclamation-triangle"></span> Are you sure you want to delete this
+                        Record?
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <!--
+                    <form method="post" action="" id="confirm_delete" enctype="multipart/form-data">
+                        <button type="submit" class="btn btn-success">
+                            <span class="fas fa-check"></span> Yes
+                        </button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <span class="fas fa-times"></span> No
+                    </button>
+                    <!-- from here testing -->
+                    <form method="delete"
+                          action="{{ url_for('rest_api.restdatabasebyid', data_id='NIL') }}"
+                          id="confirm_delete"
+                          name="Default"
+                          class="json_form"
+                          enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input type="hidden" name="data_id" id="data_id" value="">
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <span class="fas fa-check"></span> Yes
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <span class="fas fa-times"></span> No
+                        </button>
+                    </form>
+                    <!-- end testing -->
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal fade" id="download" tabindex="-1" role="dialog" aria-labelledby="edit"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title custom_align" id="Heading">Download</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <span class="fas fa-times" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <form method="post" action=""
+                      id="download_db"
+                      enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input class="form-control " type="text" placeholder="Delimiter" name="delimiter"
+                                   id="delimiter">
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input class="form-control " type="text" placeholder="Character for empty values"
+                                   name="empty" id="empty">
+                        </div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">
+                            <span class="fas fa-check"></span> Download
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+{% endblock %}
+
+{% block body %}
+    <!-- Page Content Holder credits to https://bootsnipp.com/mohsinirshad-->
+    <div id="content">
+        <!-- Table -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Databases</h4>
+                    <div class="table-responsive">
+                        <table id="mytable" class="table table-bordred table-striped">
+
+                            <thead>
+                            <tr>
+                                <th><input type="checkbox" id="checkall"/></th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Created by</th>
+                                <th>Users</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                                <th>Download</th>
+                            </tr>
+                            </thead>
+
+                            <tbody class="_hidden_src">
+                                <tr>
+                                    <td><input type="checkbox" class="checkthis"/></td>
+                                    <td id="url_field">
+
+                                    </td>
+                                    <td id="desc_field"> </td>
+                                    <td id="owner_field"> </td>
+                                    <td id="users_modal_field">
+
+                                    </td>
+                                    <td id="edit_modal_field">
+
+                                    </td>
+                                    <td id="delete_modal_field">
+
+                                    </td>
+                                    <td id="download_modal_field">
+
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extends_js %}
+    <script src="{{ url_for('static', filename='js/databases.js') }}"></script>
+{% endblock %}
+
+</body>
+
+</html>

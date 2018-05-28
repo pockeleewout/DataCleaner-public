@@ -1,0 +1,27 @@
+/*!
+ * Start Bootstrap - Logo Nav (https://startbootstrap.com/template-overviews/logo-nav)
+ * Copyright 2013-2017 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-logo-nav/blob/master/LICENSE)
+ */
+
+body {
+  padding-top: 100px;
+  padding-bottom: 80px;
+}
+
+@media (min-width: 992px) {
+  body {
+    padding-top: 100px;
+    padding-bottom: 80px;
+
+  }
+}
+
+#navBar a{
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    font-family: 'Josefin Sans', sans-serif;
+}
